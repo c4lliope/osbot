@@ -8,9 +8,10 @@ class Github
         3 * user_pull_comment_counts.fetch(handle, 0) +
         5 * user_issue_counts.fetch(handle, 0)
       ]
-    end.to_h.sort_by do |name, score|
-      score
-    end.reverse.to_h
+    end.
+    reject { |_, score| score.zero?  }.
+    sort_by { |_, score| score }.
+    reverse.to_h
   end
 
   def user_comment_counts
