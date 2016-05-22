@@ -1,0 +1,11 @@
+<div class="scoreboard">
+  <h1>Scores</h1>
+
+  <% @scores.each_with_index do |(handle, score), index| %>
+    <div class="contributor">
+      <span class="rank"><%= index + 1 %></span>
+      <span class="handle"><%= handle %></span>
+      <span class="score"><%= score %></span>
+    </div>
+  <% end %>
+</div>

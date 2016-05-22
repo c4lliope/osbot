@@ -5,5 +5,36 @@
 @import "bourbon";
 @import "neat";
 
-@import "base/base";
-@import "refills/flashes";
+// TODO Get the stylesheets working again
+// @import "base/base";
+// @import "refills/flashes";
+
+body {
+  background-color: #e0e0e0;
+}
+
+.scoreboard {
+  @include outer-container;
+}
+
+.contributor {
+  @include span-columns(6 of 12);
+  background-color: #fff;
+  border: 1px solid #444;
+  padding: $gutter;
+  overflow: hidden;
+}
+
+.rank {
+  @include span-columns(1 of 6);
+}
+
+.handle {
+  @include span-columns(3 of 6);
+  font-weight: bold;
+}
+
+.score {
+  @include span-columns(2 of 6);
+  text-align: right;
+}
