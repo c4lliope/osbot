@@ -31,6 +31,7 @@ class Github
   end
 
   def collabs
+    # TODO revise this to include everyone who has contributed
     cache("cache/collaborators.yml") do
       client.collabs("thoughtbot/administrate")
     end.map {|c| c.attrs[:login] }
