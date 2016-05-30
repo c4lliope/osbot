@@ -5,9 +5,8 @@
 @import "bourbon";
 @import "neat";
 
-// TODO Get the stylesheets working again
-// @import "base/base";
-// @import "refills/flashes";
+@import "base/base";
+@import "refills/flashes";
 
 $background-color: #e0e0e0;
 $contributor-background: #fff;
