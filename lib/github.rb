@@ -1,4 +1,8 @@
 class Github
+  BLACKLISTED_USERS = %w[
+    houndci-bot
+  ]
+
   def scores
     cache("cache/scores.yml") do
       contributors.
@@ -34,7 +38,7 @@ class Github
       issues_by_user,
       pulls_by_user,
       pull_comments_by_user,
-    ].map(&:keys).flatten.uniq
+    ].map(&:keys).flatten.uniq - BLACKLISTED_USERS
   end
 
   def pulls_by_user
