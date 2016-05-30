@@ -1,8 +1,22 @@
 <div class="scoreboard">
-  <h1>Contributors</h1>
+  <h1><%= @repo.repo_path %></h1>
 
-  <% @contributors.each_with_index do |contributor, index| %>
+  <% @repo.contributors.each_with_index do |contributor, index| %>
     <div class="contributor">
+      <div class="permissions">
+        <% if contributor.pull_permissions? %>
+          <span class="permission permission-pull">Pull</span>
+        <% end %>
+
+        <% if contributor.push_permissions? %>
+          <span class="permission permission-push">Push</span>
+        <% end %>
+
+        <% if contributor.admin_permissions? %>
+          <span class="permission permission-admin">Admin</span>
+        <% end %>
+      </div>
+
       <span class="rank"><%= index + 1 %></span>
       <span class="handle"><%= contributor.handle %></span>
       <span class="score"><%= contributor.score.to_i %></span>

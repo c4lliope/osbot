@@ -10,18 +10,13 @@ class Repo
   attr_reader :repo_path
 
   def contributors
-    github_contributors.map do |handle|
-      Contributor.new(
-        handle: handle,
-        pulls: pulls_by_user[handle] || [],
-        issues: issues_by_user[handle] || [],
-        pull_comments: pull_comments_by_user[handle] || [],
-        comments: comments_by_user[handle] || [],
-      )
-    end.
-    reject { |contributor| contributor.score.zero? }.
-    sort_by(&:score).
-    reverse
+    cache("cache/contributors.yml") do
+      github_contributors.
+        map(&method(:contributor_for_handle)).
+        reject { |contributor| contributor.score.zero? }.
+        sort_by(&:score).
+        reverse
+    end
   end
 
   private
@@ -33,6 +28,27 @@ class Repo
       pulls_by_user,
       pull_comments_by_user,
     ].map(&:keys).flatten.uniq - BLACKLISTED_USERS
+  end
+
+  def contributor_for_handle(handle)
+    Contributor.new(
+      handle: handle,
+      collaborator_info: collaborator_with_handle(handle),
+      pulls: pulls_by_user[handle] || [],
+      issues: issues_by_user[handle] || [],
+      pull_comments: pull_comments_by_user[handle] || [],
+      comments: comments_by_user[handle] || [],
+    )
+  end
+
+  def collaborators
+    @collaborators ||= cache("cache/github/collaborators.yml") do
+      client.collabs("thoughtbot/administrate")
+    end
+  end
+
+  def collaborator_with_handle(handle)
+    collaborators.detect { |collaborator| collaborator.attrs[:login] == handle }
   end
 
   def pulls_by_user

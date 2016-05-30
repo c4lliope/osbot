@@ -8,36 +8,63 @@
 @import "base/base";
 @import "refills/flashes";
 
-$background-color: #e0e0e0;
-$contributor-background: #fff;
-$base-border-color: #444;
-
 body {
-  background-color: $background-color;
+  background-color: $secondary-background-color;
 }
 
 .scoreboard {
   @include outer-container;
+  margin-bottom: $base-spacing;
+  margin-top: $base-spacing;
 }
 
 .contributor {
-  @include span-columns(6 of 12);
-  background-color: $contributor-background;
+  @include span-columns(8 of 12);
+  background-color: $base-background-color;
   border: 1px solid $base-border-color;
+  clear: both;
   overflow: hidden;
-  padding: $gutter;
+  padding: $base-spacing;
+  padding-top: $base-spacing * 2;
+  position: relative;
 }
 
 .rank {
-  @include span-columns(1 of 6);
+  @include span-columns(1 of 8);
 }
 
 .handle {
-  @include span-columns(3 of 6);
+  @include span-columns(3 of 8);
   font-weight: bold;
 }
 
 .score {
-  @include span-columns(2 of 6);
+  @include span-columns(2 of 8);
   text-align: right;
+}
+
+.permissions {
+  @include fill-parent;
+  height: 2em;
+  left: 0;
+  position: absolute;
+  top: 0;
+}
+
+.permission {
+  color: $base-background-color;
+  display: inline-block;
+  padding: $small-spacing / 4 $small-spacing;
+
+  &-admin {
+    background-color: $blue;
+  }
+
+  &-pull {
+    background-color: $medium-gray;
+  }
+
+  &-push {
+    background-color: $dark-gray;
+  }
 }

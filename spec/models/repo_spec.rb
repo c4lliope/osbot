@@ -13,6 +13,27 @@ describe Repo do
       expect(contributors.first.handle).to eq("foobar")
     end
 
+    it "assigns the permissions from the repository to the contributors" do
+      handle = "foobar"
+      collaborator_info = stub_collaborator(
+        handle: handle,
+        admin: true,
+        push: true,
+        pull: true
+      )
+      stub_github_data(
+        collabs: [collaborator_info],
+        pulls: [stub_contribution(handle: handle)],
+      )
+      repo = Repo.new("graysonwright/osbot")
+
+      contributor = repo.contributors.first
+
+      expect(contributor.admin_permissions?).to be_truthy
+      expect(contributor.push_permissions?).to be_truthy
+      expect(contributor.pull_permissions?).to be_truthy
+    end
+
     it "assigns pull requests from the repository to their author" do
       handle = "foobar"
       stub_github_data(pulls: [stub_contribution(handle: handle)])
