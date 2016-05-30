@@ -14,22 +14,6 @@ class Github
     end
   end
 
-  def score_for_user(handle)
-    1_000_000 * (
-      10 * user_score_for_contributions(pulls_by_user[handle] || []) +
-      1 * user_score_for_contributions(comments_by_user[handle] || []) +
-      3 * user_score_for_contributions(issues_by_user[handle] || []) +
-      5 * user_score_for_contributions(pull_comments_by_user[handle] || [])
-    )
-  end
-
-  def user_score_for_contributions(contribution_collection)
-    contribution_collection.sum do |contribution|
-      time_since_contribution = Time.current - contribution.attrs[:created_at]
-      1.0 / time_since_contribution
-    end
-  end
-
   private
 
   def contributors
@@ -39,6 +23,22 @@ class Github
       pulls_by_user,
       pull_comments_by_user,
     ].map(&:keys).flatten.uniq - BLACKLISTED_USERS
+  end
+
+  def score_for_user(handle)
+    1_000_000 * (
+      10 * score_for_contributions(pulls_by_user[handle] || []) +
+      1 * score_for_contributions(comments_by_user[handle] || []) +
+      3 * score_for_contributions(issues_by_user[handle] || []) +
+      5 * score_for_contributions(pull_comments_by_user[handle] || [])
+    )
+  end
+
+  def score_for_contributions(contribution_collection)
+    contribution_collection.sum do |contribution|
+      time_since_contribution = Time.current - contribution.attrs[:created_at]
+      1.0 / time_since_contribution
+    end
   end
 
   def pulls_by_user
