@@ -34,9 +34,9 @@ class Repo
   def score_for_user(handle)
     1_000_000 * (
       10 * score_for_contributions(pulls_by_user[handle] || []) +
-      1 * score_for_contributions(comments_by_user[handle] || []) +
-      3 * score_for_contributions(issues_by_user[handle] || []) +
-      5 * score_for_contributions(pull_comments_by_user[handle] || [])
+      5 * score_for_contributions(issues_by_user[handle] || []) +
+      3 * score_for_contributions(pull_comments_by_user[handle] || []) +
+      1 * score_for_contributions(comments_by_user[handle] || [])
     )
   end
 
@@ -88,17 +88,20 @@ class Repo
   end
 
   def cache(cache_file)
-    if File.exists?(cache_file)
-      puts "CACHE: Hit, reading from #{cache_file}"
-      result = YAML.parse(File.read(cache_file)).to_ruby
+    if Rails.env.development?
+      if File.exists?(cache_file)
+        puts "CACHE: Hit, reading from #{cache_file}"
+        YAML.parse(File.read(cache_file)).to_ruby
+      else
+        puts "CACHE: Miss, #{cache_file} does not exist"
+        result = yield
+        puts "CACHE: Writing repsonse to #{cache_file}"
+        File.write(cache_file, result.to_yaml)
+        result
+      end
     else
-      puts "CACHE: Miss, #{cache_file} does not exist"
-      result = yield
-      puts "CACHE: Writing repsonse to #{cache_file}"
-      File.write(cache_file, result.to_yaml)
+      yield
     end
-
-    result
   end
 
   def client
