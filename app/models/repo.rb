@@ -10,7 +10,7 @@ class Repo
   attr_reader :repo_path
 
   def contributors
-    cache("cache/contributors.yml") do
+    cache("contributors") do
       github_contributors.
         map(&method(:contributor_for_handle)).
         reject { |contributor| contributor.score.zero? }.
@@ -42,7 +42,7 @@ class Repo
   end
 
   def collaborators
-    @collaborators ||= cache("cache/github/collaborators.yml") do
+    @collaborators ||= cache("github/collaborators") do
       client.collabs("thoughtbot/administrate")
     end
   end
@@ -72,30 +72,33 @@ class Repo
   end
 
   def comments
-    cache("cache/github/issues_comments.yml") do
+    cache("github/issues_comments") do
       client.issues_comments(repo_path)
     end
   end
 
   def issues
-    cache("cache/github/issues.yml") do
+    cache("github/issues") do
       client.issues(repo_path)
     end
   end
 
   def pulls
-    cache("cache/github/pulls.yml") do
+    cache("github/pulls") do
       client.pulls(repo_path)
     end
   end
 
   def pull_comments
-    cache("cache/github/pull_comments.yml") do
+    cache("github/pull_comments") do
       client.pulls_comments(repo_path)
     end
   end
 
-  def cache(cache_file)
+  def cache(cache_name)
+    cache_file = "cache/#{repo_path}/#{cache_name}.yml"
+    FileUtils.mkdir_p(File.dirname(cache_file))
+
     if Rails.env.development?
       if File.exist?(cache_file)
         puts "CACHE: Hit, reading from #{cache_file}"

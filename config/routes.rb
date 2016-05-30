@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  resources :collaborators, only: :index
+  get "/gh/:organization/:repo_name/", to: "contributors#index"
 end
