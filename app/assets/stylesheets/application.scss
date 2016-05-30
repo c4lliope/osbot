@@ -9,8 +9,12 @@
 // @import "base/base";
 // @import "refills/flashes";
 
+$background-color: #e0e0e0;
+$contributor-background: #fff;
+$base-border-color: #444;
+
 body {
-  background-color: #e0e0e0;
+  background-color: $background-color;
 }
 
 .scoreboard {
@@ -19,10 +23,10 @@ body {
 
 .contributor {
   @include span-columns(6 of 12);
-  background-color: #fff;
-  border: 1px solid #444;
-  padding: $gutter;
+  background-color: $contributor-background;
+  border: 1px solid $base-border-color;
   overflow: hidden;
+  padding: $gutter;
 }
 
 .rank {

@@ -95,10 +95,12 @@ describe Repo do
     end
 
     def stub_contribution(handle: "foobar", created_at: 1.day.ago)
-      double(attrs: {
-        created_at: created_at,
-        user: double(attrs: { login: handle}),
-      })
+      double(
+        attrs: {
+          created_at: created_at,
+          user: double(attrs: { login: handle }),
+        }
+      )
     end
   end
 end

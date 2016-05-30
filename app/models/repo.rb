@@ -1,7 +1,7 @@
 class Repo
   BLACKLISTED_USERS = %w[
     houndci-bot
-  ]
+  ].freeze
 
   def initialize(repo)
     @repo = repo
@@ -13,7 +13,7 @@ class Repo
     cache("cache/scores.yml") do
       contributors.
         map { |handle| [handle, score_for_user(handle)] }.
-        reject { |_, score| score.zero?  }.
+        reject { |_, score| score.zero? }.
         sort_by { |_, score| score }.
         reverse.
         to_h
@@ -48,24 +48,28 @@ class Repo
   end
 
   def pulls_by_user
-    @pulls_by_user ||= pulls.group_by { |pull| pull.attrs[:user].attrs[:login] }
+    @pulls_by_user ||= group_by_user(pulls)
   end
 
   def issues_by_user
-    @issues_by_user ||= issues.group_by { |issue| issue.attrs[:user].attrs[:login] }
+    @issues_by_user ||= group_by_user(issues)
   end
 
   def comments_by_user
-    @comments_by_user ||= comments.group_by { |comment| comment.attrs[:user].attrs[:login] }
+    @comments_by_user ||= group_by_user(comments)
   end
 
   def pull_comments_by_user
-    @pull_comments_by_user ||= pull_comments.group_by { |pull_comment| pull_comment.attrs[:user].attrs[:login] }
+    @pull_comments_by_user ||= group_by_user(pull_comments)
+  end
+
+  def group_by_user(contributions)
+    contributions.group_by { |contrib| contrib.attrs[:user].attrs[:login] }
   end
 
   def comments
     cache("cache/github/issues_comments.yml") do
-       client.issues_comments(repo)
+      client.issues_comments(repo)
     end
   end
 
@@ -89,7 +93,7 @@ class Repo
 
   def cache(cache_file)
     if Rails.env.development?
-      if File.exists?(cache_file)
+      if File.exist?(cache_file)
         puts "CACHE: Hit, reading from #{cache_file}"
         YAML.parse(File.read(cache_file)).to_ruby
       else
