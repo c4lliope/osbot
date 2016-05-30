@@ -1,7 +1,5 @@
-require "github"
-
 class CollaboratorsController < ApplicationController
   def index
-    @scores = Github.new.scores
+    @scores = Repo.new("thoughtbot/administrate").scores
   end
 end

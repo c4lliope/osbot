@@ -1,7 +1,13 @@
-class Github
+class Repo
   BLACKLISTED_USERS = %w[
     houndci-bot
   ]
+
+  def initialize(repo)
+    @repo = repo
+  end
+
+  attr_reader :repo
 
   def scores
     cache("cache/scores.yml") do
@@ -59,25 +65,25 @@ class Github
 
   def comments
     cache("cache/github/issues_comments.yml") do
-       client.issues_comments("thoughtbot/administrate")
+       client.issues_comments(repo)
     end
   end
 
   def issues
     cache("cache/github/issues.yml") do
-      client.issues("thoughtbot/administrate")
+      client.issues(repo)
     end
   end
 
   def pulls
     cache("cache/github/pulls.yml") do
-      client.pulls("thoughtbot/administrate")
+      client.pulls(repo)
     end
   end
 
   def pull_comments
     cache("cache/github/pull_comments.yml") do
-      client.pulls_comments("thoughtbot/administrate")
+      client.pulls_comments(repo)
     end
   end
 
