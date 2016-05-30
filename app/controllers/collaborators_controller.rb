@@ -1,5 +1,5 @@
 class CollaboratorsController < ApplicationController
   def index
-    @scores = Repo.new("thoughtbot/administrate").scores
+    @contributors = Repo.new("thoughtbot/administrate").contributors
   end
 end

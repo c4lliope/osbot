@@ -3,48 +3,36 @@ class Repo
     houndci-bot
   ].freeze
 
-  def initialize(repo)
-    @repo = repo
+  def initialize(repo_path)
+    @repo_path = repo_path
   end
 
-  attr_reader :repo
+  attr_reader :repo_path
 
-  def scores
-    cache("cache/scores.yml") do
-      contributors.
-        map { |handle| [handle, score_for_user(handle)] }.
-        reject { |_, score| score.zero? }.
-        sort_by { |_, score| score }.
-        reverse.
-        to_h
-    end
+  def contributors
+    github_contributors.map do |handle|
+      Contributor.new(
+        handle: handle,
+        pulls: pulls_by_user[handle] || [],
+        issues: issues_by_user[handle] || [],
+        pull_comments: pull_comments_by_user[handle] || [],
+        comments: comments_by_user[handle] || [],
+      )
+    end.
+    reject { |contributor| contributor.score.zero? }.
+    sort_by(&:score).
+    reverse
   end
 
   private
 
-  def contributors
+  def github_contributors
     [
       comments_by_user,
       issues_by_user,
       pulls_by_user,
       pull_comments_by_user,
     ].map(&:keys).flatten.uniq - BLACKLISTED_USERS
-  end
-
-  def score_for_user(handle)
-    1_000_000 * (
-      10 * score_for_contributions(pulls_by_user[handle] || []) +
-      5 * score_for_contributions(issues_by_user[handle] || []) +
-      3 * score_for_contributions(pull_comments_by_user[handle] || []) +
-      1 * score_for_contributions(comments_by_user[handle] || [])
-    )
-  end
-
-  def score_for_contributions(contribution_collection)
-    contribution_collection.sum do |contribution|
-      time_since_contribution = Time.current - contribution.attrs[:created_at]
-      1.0 / time_since_contribution
-    end
   end
 
   def pulls_by_user
@@ -69,25 +57,25 @@ class Repo
 
   def comments
     cache("cache/github/issues_comments.yml") do
-      client.issues_comments(repo)
+      client.issues_comments(repo_path)
     end
   end
 
   def issues
     cache("cache/github/issues.yml") do
-      client.issues(repo)
+      client.issues(repo_path)
     end
   end
 
   def pulls
     cache("cache/github/pulls.yml") do
-      client.pulls(repo)
+      client.pulls(repo_path)
     end
   end
 
   def pull_comments
     cache("cache/github/pull_comments.yml") do
-      client.pulls_comments(repo)
+      client.pulls_comments(repo_path)
     end
   end
 

@@ -1,11 +1,11 @@
 <div class="scoreboard">
-  <h1>Scores</h1>
+  <h1>Contributors</h1>
 
-  <% @scores.each_with_index do |(handle, score), index| %>
+  <% @contributors.each_with_index do |contributor, index| %>
     <div class="contributor">
       <span class="rank"><%= index + 1 %></span>
-      <span class="handle"><%= handle %></span>
-      <span class="score"><%= score.to_i %></span>
+      <span class="handle"><%= contributor.handle %></span>
+      <span class="score"><%= contributor.score.to_i %></span>
     </div>
   <% end %>
 </div>
