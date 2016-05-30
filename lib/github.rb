@@ -1,71 +1,78 @@
 class Github
   def scores
-    collabs.map do |handle|
-      [
-        handle,
-        10 * user_pull_counts.fetch(handle, 0) +
-        1 * user_comment_counts.fetch(handle, 0) +
-        3 * user_pull_comment_counts.fetch(handle, 0) +
-        5 * user_issue_counts.fetch(handle, 0)
-      ]
-    end.
-    reject { |_, score| score.zero?  }.
-    sort_by { |_, score| score }.
-    reverse.to_h
+    cache("cache/scores.yml") do
+      contributors.
+        map { |handle| [handle, score_for_user(handle)] }.
+        reject { |_, score| score.zero?  }.
+        sort_by { |_, score| score }.
+        reverse.
+        to_h
+    end
   end
 
-  def user_comment_counts
-    @user_comment_counts ||= count_by_user(comments)
+  def score_for_user(handle)
+    1_000_000 * (
+      10 * user_score_for_contributions(pulls_by_user[handle] || []) +
+      1 * user_score_for_contributions(comments_by_user[handle] || []) +
+      3 * user_score_for_contributions(issues_by_user[handle] || []) +
+      5 * user_score_for_contributions(pull_comments_by_user[handle] || [])
+    )
   end
 
-  def user_issue_counts
-    @user_issue_counts ||= count_by_user(issues)
-  end
-
-  def user_pull_counts
-    @user_pull_counts ||= count_by_user(pulls)
-  end
-
-  def user_pull_comment_counts
-    @user_pull_comment_counts ||= count_by_user(pull_comments)
-  end
-
-  def collabs
-    # TODO revise this to include everyone who has contributed
-    cache("cache/collaborators.yml") do
-      client.collabs("thoughtbot/administrate")
-    end.map {|c| c.attrs[:login] }
+  def user_score_for_contributions(contribution_collection)
+    contribution_collection.sum do |contribution|
+      time_since_contribution = Time.current - contribution.attrs[:created_at]
+      1.0 / time_since_contribution
+    end
   end
 
   private
 
-  def count_by_user(resources)
-    resources.
-      map {|c| c.attrs[:user].attrs[:login] }.
-      group_by {|handle| handle}.
-      transform_values {|v| v.count }
+  def contributors
+    [
+      comments_by_user,
+      issues_by_user,
+      pulls_by_user,
+      pull_comments_by_user,
+    ].map(&:keys).flatten.uniq
+  end
+
+  def pulls_by_user
+    @pulls_by_user ||= pulls.group_by { |pull| pull.attrs[:user].attrs[:login] }
+  end
+
+  def issues_by_user
+    @issues_by_user ||= issues.group_by { |issue| issue.attrs[:user].attrs[:login] }
+  end
+
+  def comments_by_user
+    @comments_by_user ||= comments.group_by { |comment| comment.attrs[:user].attrs[:login] }
+  end
+
+  def pull_comments_by_user
+    @pull_comments_by_user ||= pull_comments.group_by { |pull_comment| pull_comment.attrs[:user].attrs[:login] }
   end
 
   def comments
-    cache("cache/issues_comments.yml") do
+    cache("cache/github/issues_comments.yml") do
        client.issues_comments("thoughtbot/administrate")
     end
   end
 
   def issues
-    cache("cache/issues.yml") do
+    cache("cache/github/issues.yml") do
       client.issues("thoughtbot/administrate")
     end
   end
 
   def pulls
-    cache("cache/pulls.yml") do
+    cache("cache/github/pulls.yml") do
       client.pulls("thoughtbot/administrate")
     end
   end
 
   def pull_comments
-    cache("cache/pull_comments.yml") do
+    cache("cache/github/pull_comments.yml") do
       client.pulls_comments("thoughtbot/administrate")
     end
   end
