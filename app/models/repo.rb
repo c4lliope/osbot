@@ -43,7 +43,7 @@ class Repo
 
   def collaborators
     @collaborators ||= cache("github/collaborators") do
-      client.collabs("thoughtbot/administrate")
+      client.collabs(repo_path)
     end
   end
 
