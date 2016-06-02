@@ -34,12 +34,12 @@ After setting up, you can run the application using [Heroku Local]:
 
     % heroku local
 
-Visit http://localhost:3000/gh/graysonwright/osbot to see the site in action.
+Visit <http://localhost:3000/gh/graysonwright/osbot> to see the site in action.
 
 For something a bit more exciting, try:
 
-* http://localhost:3000/gh/thoughtbot/administrate
-* http://localhost:3000/gh/codeforamerica/streetmix
+* <http://localhost:3000/gh/thoughtbot/administrate>
+* <http://localhost:3000/gh/codeforamerica/streetmix>
 
 Also try to visit the repo page
 for a repository that you have admin permissions on.
