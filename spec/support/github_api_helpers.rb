@@ -8,7 +8,7 @@ module GithubApiHelpers
     )
   end
 
-  def stub_github_data(attributes = {})
+  def fake_github_client(attributes = {})
     default_attributes = {
       issues: [],
       issues_comments: [],
@@ -18,10 +18,7 @@ module GithubApiHelpers
       collabs: [],
     }
 
-    fake_github_client = double(default_attributes.merge(attributes))
-    allow(Octokit::Client).to receive(:new).and_return(fake_github_client)
-
-    fake_github_client
+    double(default_attributes.merge(attributes))
   end
 
   def stub_collaborator(handle: "foobar", admin: false, push: false, pull: true)

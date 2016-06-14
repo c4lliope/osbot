@@ -4,10 +4,6 @@
   <% @repo.contributors.each_with_index do |contributor, index| %>
     <div class="contributor">
       <div class="permissions">
-        <% if contributor.pull_permissions? %>
-          <span class="permission permission-pull">Pull</span>
-        <% end %>
-
         <% if contributor.push_permissions? %>
           <span class="permission permission-push">Push</span>
         <% end %>

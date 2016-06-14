@@ -14,19 +14,21 @@ your machine with [this script].
 
 ## Setting up GitHub authentication
 
-This app relies on the GitHub Octokit library
-in order to communicate with the GitHub API.
-The easiest way to set your credentials with the library
-is through a `~/.netrc` file.
-There are [instructions for getting set up with `~/.netrc`][netrc]
-in the Octokit README.
+Sign into GitHub,
+then [register for an OAuth ID and secret][github new app]
+for your application's development environment.
+Use the details:
 
-If you don't want to put your master GitHub password in the `~/.netrc` file,
-you can [create a Personal Access Token][access]
-to use in place of your password.
+* Application Name: Osbot Development
+* Homepage URL: `http://localhost:3000`
+* Authorization Callback URL: `http://localhost:3000`
 
-[netrc]: https://github.com/octokit/octokit.rb#using-a-netrc-file
-[access]: https://github.com/blog/1509-personal-api-tokens
+On the confirmation screen,
+copy the Client ID and Client Secret
+to `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`
+in the `.env.local` file.
+
+[github new app]: https://github.com/settings/applications/new
 
 ## Running the App
 

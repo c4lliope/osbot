@@ -5,8 +5,8 @@ describe Repo do
 
   describe "#contributors" do
     it "returns a list of contributors to the repo" do
-      stub_github_data(pulls: [stub_contribution(handle: "foobar")])
-      repo = Repo.new("graysonwright/osbot")
+      client = fake_github_client(pulls: [stub_contribution(handle: "foobar")])
+      repo = Repo.new("graysonwright/osbot", client)
 
       contributors = repo.contributors
 
@@ -21,11 +21,11 @@ describe Repo do
         push: true,
         pull: true
       )
-      stub_github_data(
+      client = fake_github_client(
         collabs: [collaborator_info],
         pulls: [stub_contribution(handle: handle)],
       )
-      repo = Repo.new("graysonwright/osbot")
+      repo = Repo.new("graysonwright/osbot", client)
 
       contributor = repo.contributors.first
 
@@ -36,8 +36,8 @@ describe Repo do
 
     it "assigns pull requests from the repository to their author" do
       handle = "foobar"
-      stub_github_data(pulls: [stub_contribution(handle: handle)])
-      repo = Repo.new("graysonwright/osbot")
+      client = fake_github_client(pulls: [stub_contribution(handle: handle)])
+      repo = Repo.new("graysonwright/osbot", client)
 
       contributor = repo.contributors.first
 
@@ -47,8 +47,8 @@ describe Repo do
 
     it "assigns issues from the repository to their author" do
       handle = "foobar"
-      stub_github_data(issues: [stub_contribution(handle: handle)])
-      repo = Repo.new("graysonwright/osbot")
+      client = fake_github_client(issues: [stub_contribution(handle: handle)])
+      repo = Repo.new("graysonwright/osbot", client)
 
       contributor = repo.contributors.first
 
@@ -58,8 +58,10 @@ describe Repo do
 
     it "assigns issue comments from the repository to their author" do
       handle = "foobar"
-      stub_github_data(issues_comments: [stub_contribution(handle: handle)])
-      repo = Repo.new("graysonwright/osbot")
+      client = fake_github_client(
+        issues_comments: [stub_contribution(handle: handle)],
+      )
+      repo = Repo.new("graysonwright/osbot", client)
 
       contributor = repo.contributors.first
 
@@ -69,8 +71,10 @@ describe Repo do
 
     it "assigns pull request comments from the repository to their author" do
       handle = "foobar"
-      stub_github_data(pulls_comments: [stub_contribution(handle: handle)])
-      repo = Repo.new("graysonwright/osbot")
+      client = fake_github_client(
+        pulls_comments: [stub_contribution(handle: handle)],
+      )
+      repo = Repo.new("graysonwright/osbot", client)
 
       contributor = repo.contributors.first
 

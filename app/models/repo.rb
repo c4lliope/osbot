@@ -3,8 +3,9 @@ class Repo
     houndci-bot
   ].freeze
 
-  def initialize(repo_path)
+  def initialize(repo_path, github_client)
     @repo_path = repo_path
+    @github_client = github_client
   end
 
   attr_reader :repo_path
@@ -116,11 +117,6 @@ class Repo
   end
 
   def client
-    @client ||= begin
-                  Octokit.auto_paginate = true
-                  client = Octokit::Client.new(netrc: true)
-                  client.login
-                  client
-                end
+    @github_client
   end
 end
