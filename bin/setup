@@ -22,11 +22,13 @@ qmake_check() {
 		echo "It looks like your version of QMake is out of date!\nPlease make sure QMake is built with at least Qt 5. See https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit"
 		exit 1
 	fi
+
+	false # forces bundle install to run if the bundle check exit status == 1 but qmake exists
 }
 
 # Set up Ruby dependencies via Bundler
 gem install bundler --conservative
-bundle check || qmake_check || bundle install
+(bundle check || qmake_check) || bundle install
 
 # Set up database and add any development seed data
 bin/rake dev:prime

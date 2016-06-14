@@ -5,10 +5,9 @@
 After you have cloned this repo, run this setup script to set up your machine
 with the necessary dependencies to run and test this app:
 
-    % ./bin/setup
+    %> ./bin/setup
 
-It assumes you have a machine equipped with Ruby, Postgres, etc. If not, set up
-your machine with [this script].
+It assumes you have a machine equipped with at least Ruby (2.3.0), Postgres, and XCode (possibly some others). If not, set up your machine with [this script].
 
 [this script]: https://github.com/thoughtbot/laptop
 
@@ -32,7 +31,7 @@ to use in place of your password.
 
 After setting up, you can run the application using [Heroku Local]:
 
-    % heroku local
+    %> heroku local
 
 Visit <http://localhost:3000/gh/graysonwright/osbot> to see the site in action.
 
