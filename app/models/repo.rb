@@ -20,6 +20,30 @@ class Repo
     end
   end
 
+  def comments
+    cache("github/issues_comments") do
+      client.issues_comments(repo_path)
+    end
+  end
+
+  def issues
+    cache("github/issues") do
+      client.issues(repo_path)
+    end
+  end
+
+  def pulls
+    cache("github/pulls") do
+      client.pulls(repo_path)
+    end
+  end
+
+  def pull_comments
+    cache("github/pull_comments") do
+      client.pulls_comments(repo_path)
+    end
+  end
+
   private
 
   def github_contributors
@@ -70,30 +94,6 @@ class Repo
 
   def group_by_user(contributions)
     contributions.group_by { |contrib| contrib.attrs[:user].attrs[:login] }
-  end
-
-  def comments
-    cache("github/issues_comments") do
-      client.issues_comments(repo_path)
-    end
-  end
-
-  def issues
-    cache("github/issues") do
-      client.issues(repo_path)
-    end
-  end
-
-  def pulls
-    cache("github/pulls") do
-      client.pulls(repo_path)
-    end
-  end
-
-  def pull_comments
-    cache("github/pull_comments") do
-      client.pulls_comments(repo_path)
-    end
   end
 
   def cache(cache_name)

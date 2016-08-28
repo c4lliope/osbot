@@ -16,7 +16,11 @@
 <body class="<%= body_class %>">
   <%= render "header" %>
   <%= render "flashes" -%>
-  <%= yield %>
+
+  <div class="content">
+    <%= yield %>
+  </div>
+
   <%= render "javascript" %>
   <%= render "css_overrides" %>
 </body>

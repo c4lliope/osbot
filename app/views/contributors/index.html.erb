@@ -1,6 +1,13 @@
-<div class="scoreboard">
+<div class="repo-stats">
   <h1><%= @repo.repo_path %></h1>
 
+  <div>Pull Requests: <%= @repo.pulls.count %></div>
+  <div>Issues: <%= @repo.issues.count %></div>
+  <div>Issue Comments: <%= @repo.comments.count %></div>
+  <div>Pull Comments: <%= @repo.pull_comments.count %></div>
+</div>
+
+<div class="scoreboard">
   <% @repo.contributors.each_with_index do |contributor, index| %>
     <div class="contributor">
       <div class="permissions">
@@ -15,7 +22,12 @@
 
       <span class="rank"><%= index + 1 %></span>
       <span class="handle"><%= contributor.handle %></span>
-      <span class="score"><%= contributor.score.to_i %></span>
+      <span class="score">
+        Pulls: <%= contributor.pulls.count %><br/>
+        Issues: <%= contributor.issues.count %><br/>
+        Issue Comments: <%= contributor.comments.count %><br/>
+        Pull Comments: <%= contributor.pull_comments.count %>
+      </span>
     </div>
   <% end %>
 </div>

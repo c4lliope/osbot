@@ -12,14 +12,34 @@ body {
   background-color: $secondary-background-color;
 }
 
-.scoreboard {
+.content {
   @include outer-container;
+}
+
+.header {
   margin-bottom: $base-spacing;
-  margin-top: $base-spacing;
+  background-color: #202020;
+  padding: $small-spacing;
+  text-align: right;
+
+  a {
+    color: #fefefe;
+  }
+
+  &-wrapper {
+    @include outer-container;
+  }
+}
+
+.scoreboard {
+  @include span-columns(8 of 12);
+}
+
+.repo-stats {
+  @include span-columns(4 of 12);
 }
 
 .contributor {
-  @include span-columns(8 of 12);
   background-color: $base-background-color;
   border: 1px solid $base-border-color;
   clear: both;
