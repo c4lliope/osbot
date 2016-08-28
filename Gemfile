@@ -17,7 +17,7 @@ gem "octokit", "~> 4.0"
 gem "pg"
 gem "puma"
 gem "rack-canonical-host"
-gem "rails", "~> 4.2.0"
+gem "rails", "~> 5.0"
 gem "recipient_interceptor"
 gem "sass-rails", "~> 5.0"
 gem "simple_form"
@@ -27,7 +27,6 @@ gem "title"
 gem "uglifier"
 
 group :development do
-  gem "quiet_assets"
   gem "refills"
   gem "spring"
   gem "spring-commands-rspec"
@@ -42,7 +41,7 @@ group :development, :test do
   gem "factory_girl_rails"
   gem "pry-byebug"
   gem "pry-rails"
-  gem "rspec-rails", "~> 3.4.0"
+  gem "rspec-rails", "~> 3.5.0"
 end
 
 group :development, :staging do
